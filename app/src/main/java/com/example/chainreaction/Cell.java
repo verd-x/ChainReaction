@@ -7,8 +7,8 @@ public class Cell {
     private int numBolas;
 
     public Cell(int fila, int columna) {
-        boolean bordeNorteSur = (fila == 0 || fila == Game.NFILAS);
-        boolean bordeEsteOeste = (columna == 0 || columna == Game.NCOLUMNAS);
+        boolean bordeNorteSur = (fila == 0 || fila == Game.NFILAS - 1);
+        boolean bordeEsteOeste = (columna == 0 || columna == Game.NCOLUMNAS - 1);
         if(bordeNorteSur && bordeEsteOeste) {
             pos = Position.CORNER;
         } else if(bordeEsteOeste || bordeNorteSur) {
@@ -23,18 +23,19 @@ public class Cell {
         playerId = null;
     }
 
-    public void annadirBola(String playerId) throws Exception {
-        if(this.playerId == null) {
+    public void annadirBola(String playerId, boolean sobreescribir) throws Exception {
+        if(this.playerId == null || sobreescribir) {
             this.playerId = playerId;
         }
-        if(this.playerId == playerId) {
+        if(this.playerId == playerId && !sobreescribir) {
             numBolas++;
         } else  {
             throw new Exception("La celda no es del jugador que la ha tocado.");
         }
+        comprobarExplosion();
     }
 
-    public void comprobarExplosion() throws ExplosionException {
+    private void comprobarExplosion() throws ExplosionException {
         int maxBolas = 4;
         switch(pos) {
             case CORNER:
@@ -48,13 +49,16 @@ public class Cell {
                 break;
         }
         if (numBolas >= maxBolas) {
+            numBolas = 0;
             throw new ExplosionException();
         }
-        numBolas = 0;
     }
 
     public int getNumBolas() {
         return numBolas;
     }
 
+    public String getPlayerId() {
+        return playerId;
+    }
 }

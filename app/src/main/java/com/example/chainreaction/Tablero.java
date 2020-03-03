@@ -3,6 +3,7 @@ package com.example.chainreaction;
 import android.util.Pair;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +37,39 @@ public class Tablero {
         cellMap.put(new Pair<Integer, Integer>(fila, columna), celda);
     }
 
-    public void annadirBola(int fila, int columna, String playerId) throws Exception {
-        cellMap.get(new Pair<Integer, Integer>(fila, columna)).annadirBola(playerId);
+    public void annadirBola(int fila, int columna, String playerId, boolean sobreescribir) throws Exception {
+        if(existeCelda(fila, columna)) {
+            try {
+                cellMap.get(new Pair<Integer, Integer>(fila, columna)).annadirBola(playerId, sobreescribir);
+            } catch (ExplosionException e) {
+                cellMap.get(new Pair<Integer, Integer>(fila - 1, columna)).annadirBola(playerId, true);
+                cellMap.get(new Pair<Integer, Integer>(fila, columna - 1)).annadirBola(playerId, true);
+                cellMap.get(new Pair<Integer, Integer>(fila + 1, columna)).annadirBola(playerId, true);
+                cellMap.get(new Pair<Integer, Integer>(fila , columna + 1)).annadirBola(playerId, true);
+            }
+        }
     }
 
+    private boolean existeCelda(int fila, int columna) {
+        return (fila >= 0 && columna >= 0 && fila < Game.NFILAS && columna < Game.NCOLUMNAS);
+    }
+
+    private boolean checkWinner() {
+        boolean result = true;
+        String winner = null;
+        short count = 0;
+        Iterator<Cell> it = celdas.iterator();
+        while(result && it.hasNext()) {
+            Cell c = it.next();
+            if(c.getPlayerId() != null) {
+                count++;
+                if (winner == null) {
+                    winner = c.getPlayerId();
+                } else if (winner != c.getPlayerId()) {
+                    result = false;
+                }
+            }
+        }
+        return (result && winner != null && count > 1);
+    }
 }
