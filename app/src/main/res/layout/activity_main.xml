@@ -8,11 +8,13 @@
     android:padding="18dp"
     android:background="@color/colorPrimary">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:text="Button"
+        android:id="@+id/boton">
 
-    </TableLayout>
+    </Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
