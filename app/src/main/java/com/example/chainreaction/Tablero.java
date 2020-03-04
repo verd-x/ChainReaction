@@ -11,7 +11,7 @@ import java.util.Map;
 public class Tablero {
 
     private List<Cell> celdas;
-    private Map<Pair<Integer,Integer>, Cell> cellMap;
+    private Map<Pair<Integer, Integer>, Cell> cellMap;
 
     public Tablero() {
         init();
@@ -24,8 +24,8 @@ public class Tablero {
     private void init() {
         celdas = new LinkedList<Cell>();
         cellMap = new HashMap<Pair<Integer, Integer>, Cell>();
-        for(int fila = 0; fila < Game.NFILAS; fila++) {
-            for(int columna = 0; columna < Game.NCOLUMNAS; columna++) {
+        for (int fila = 0; fila < Game.NFILAS; fila++) {
+            for (int columna = 0; columna < Game.NCOLUMNAS; columna++) {
                 add(fila, columna);
             }
         }
@@ -38,14 +38,14 @@ public class Tablero {
     }
 
     public void annadirBola(int fila, int columna, String playerId, boolean sobreescribir) throws Exception {
-        if(existeCelda(fila, columna)) {
+        if (existeCelda(fila, columna)) {
             try {
                 cellMap.get(new Pair<Integer, Integer>(fila, columna)).annadirBola(playerId, sobreescribir);
             } catch (ExplosionException e) {
                 cellMap.get(new Pair<Integer, Integer>(fila - 1, columna)).annadirBola(playerId, true);
                 cellMap.get(new Pair<Integer, Integer>(fila, columna - 1)).annadirBola(playerId, true);
                 cellMap.get(new Pair<Integer, Integer>(fila + 1, columna)).annadirBola(playerId, true);
-                cellMap.get(new Pair<Integer, Integer>(fila , columna + 1)).annadirBola(playerId, true);
+                cellMap.get(new Pair<Integer, Integer>(fila, columna + 1)).annadirBola(playerId, true);
             }
         }
     }
@@ -54,14 +54,18 @@ public class Tablero {
         return (fila >= 0 && columna >= 0 && fila < Game.NFILAS && columna < Game.NCOLUMNAS);
     }
 
-    private boolean checkWinner() {
+    public Cell getCelda(int fila, int columna) {
+        return cellMap.get(new Pair<Integer, Integer>(fila, columna));
+    }
+
+    public String checkWinner() {
         boolean result = true;
         String winner = null;
         short count = 0;
         Iterator<Cell> it = celdas.iterator();
-        while(result && it.hasNext()) {
+        while (result && it.hasNext()) {
             Cell c = it.next();
-            if(c.getPlayerId() != null) {
+            if (c.getPlayerId() != null) {
                 count++;
                 if (winner == null) {
                     winner = c.getPlayerId();
@@ -70,6 +74,10 @@ public class Tablero {
                 }
             }
         }
-        return (result && winner != null && count > 1);
+        if (result && count > 1) {
+            return winner;
+        } else {
+            return null;
+        }
     }
 }
