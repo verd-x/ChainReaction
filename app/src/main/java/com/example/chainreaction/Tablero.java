@@ -24,8 +24,8 @@ public class Tablero {
     private void init() {
         celdas = new LinkedList<Cell>();
         cellMap = new HashMap<Pair<Integer, Integer>, Cell>();
-        for(int fila = 0; fila < Game.NFILAS; fila++) {
-            for(int columna = 0; columna < Game.NCOLUMNAS; columna++) {
+        for(int fila = 0; fila < GameActivity.NFILAS; fila++) {
+            for(int columna = 0; columna < GameActivity.NCOLUMNAS; columna++) {
                 add(fila, columna);
             }
         }
@@ -51,7 +51,7 @@ public class Tablero {
     }
 
     private boolean existeCelda(int fila, int columna) {
-        return (fila >= 0 && columna >= 0 && fila < Game.NFILAS && columna < Game.NCOLUMNAS);
+        return (fila >= 0 && columna >= 0 && fila < GameActivity.NFILAS && columna < GameActivity.NCOLUMNAS);
     }
 
     private boolean checkWinner() {

@@ -7,8 +7,8 @@ public class Cell {
     private int numBolas;
 
     public Cell(int fila, int columna) {
-        boolean bordeNorteSur = (fila == 0 || fila == Game.NFILAS - 1);
-        boolean bordeEsteOeste = (columna == 0 || columna == Game.NCOLUMNAS - 1);
+        boolean bordeNorteSur = (fila == 0 || fila == GameActivity.NFILAS - 1);
+        boolean bordeEsteOeste = (columna == 0 || columna == GameActivity.NCOLUMNAS - 1);
         if(bordeNorteSur && bordeEsteOeste) {
             pos = Position.CORNER;
         } else if(bordeEsteOeste || bordeNorteSur) {
