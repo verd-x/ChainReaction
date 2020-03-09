@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         //NumberPicker Jugadores
         final NumberPicker npPlayers = findViewById(R.id.np_players);
-        npColumnas.setMaxValue(10);
-        npColumnas.setMinValue(2);
+        npPlayers.setMaxValue(10);
+        npPlayers.setMinValue(2);
 
 
         //StartButton
