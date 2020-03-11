@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         final NumberPicker npFilasXColumnas = findViewById(R.id.np_tamanno);
         final String[] values = {"3 x 2", "6 x 4", "9 x 6", "12 x 8"};
         npFilasXColumnas.setDisplayedValues(values);
+        npFilasXColumnas.setMaxValue(values.length - 1);
 
 
         //NumberPicker Jugadores

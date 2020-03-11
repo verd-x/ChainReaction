@@ -37,16 +37,19 @@ public class Tablero {
         cellMap.put(new Pair<Integer, Integer>(fila, columna), celda);
     }
 
-    public void annadirBola(int fila, int columna, String playerId, boolean sobreescribir) throws Exception {
+    public void annadirBola(int fila, int columna, String playerId, boolean sobreescribir) throws Exception{
+
         if (existeCelda(fila, columna)) {
+            Cell celda = cellMap.get(new Pair<Integer, Integer>(fila, columna));
             try {
-                cellMap.get(new Pair<Integer, Integer>(fila, columna)).annadirBola(playerId, sobreescribir);
+                celda.annadirBola(playerId, sobreescribir);
             } catch (ExplosionException e) {
                 cellMap.get(new Pair<Integer, Integer>(fila - 1, columna)).annadirBola(playerId, true);
                 cellMap.get(new Pair<Integer, Integer>(fila, columna - 1)).annadirBola(playerId, true);
                 cellMap.get(new Pair<Integer, Integer>(fila + 1, columna)).annadirBola(playerId, true);
                 cellMap.get(new Pair<Integer, Integer>(fila, columna + 1)).annadirBola(playerId, true);
             }
+
         }
     }
 

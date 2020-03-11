@@ -1,5 +1,6 @@
 package com.example.chainreaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -20,7 +21,15 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Game game = new Game();
+
+        Intent i = getIntent();
+        Integer cols = i.getIntExtra("NCOLUMNAS", 6);
+        Integer filas = i.getIntExtra("NFILAS", 9);
+        Integer players = i.getIntExtra("NPLAYERS", 2);
+
+        Game.setNFILAS(filas);
+        Game.setNCOLUMNAS(cols);
+        game = new Game(players);
 
         //LAYOUT
         TableLayout layout = new TableLayout(this);
@@ -32,16 +41,20 @@ public class GameActivity extends AppCompatActivity {
         layout.setLayoutParams(params);
         layout.setStretchAllColumns(true);
 
-        for(int i = 0; i < Game.NFILAS;i++) {
+        for(int fila = 0; fila < Game.NFILAS;fila++) {
             TableRow row = createRow();
-            for(int j = 0; j < Game.NCOLUMNAS; j++){
-                row.addView(createTextView());
+            for(int col = 0; col < Game.NCOLUMNAS; col++){
+                row.addView(createTextView(fila, col));
             }
             layout.addView(row);
         }
 
         layout.setVisibility(View.VISIBLE);
+        game.setLayout(layout);
+        game.update();
+        game.start();
         setContentView(layout);
+
 
     }
 
@@ -57,8 +70,8 @@ public class GameActivity extends AppCompatActivity {
         return row;
     }
 
-    private TextView createTextView() {
-        TextView view = new TextView(this);
+    private PosTextView createTextView(int fila, int columna) {
+        PosTextView view = new PosTextView(this, fila, columna);
         view.setText("Hello");
         view.setGravity(Gravity.CENTER);
         TableRow.LayoutParams param = new TableRow.LayoutParams(
@@ -67,8 +80,13 @@ public class GameActivity extends AppCompatActivity {
                  1.0f
         );
         view.setLayoutParams(param);
+        view.setOnClickListener(new CellOnClickListener(game));
+        view.setId(Game.getId(fila, columna));
+
 
         view.setVisibility(View.VISIBLE);
         return view;
     }
+
+
 }

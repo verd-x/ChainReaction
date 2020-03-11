@@ -1,8 +1,10 @@
 package com.example.chainreaction;
 
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.TableLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,23 +18,20 @@ public class Game extends AppCompatActivity {
     private Player currPlayer;
     private Tablero tablero;
     private List<Player> players;
-    private GridLayout layout;
+    private TableLayout layout;
 
     public Game(int NPLAYERS, int NFILAS, int NCOLUMNAS) {
         this.NFILAS = NFILAS;
         this.NCOLUMNAS = NCOLUMNAS;
         init(NPLAYERS);
+        tablero = new Tablero();
     }
 
-    public Game(int NPLAYERS) {
+    public Game(int nPlayers) {
         this.NFILAS = 9;
         this.NCOLUMNAS = 6;
-        init(NPLAYERS);
-    }
-
-    public Game() {
-        this.NFILAS = 9;
-        this.NCOLUMNAS = 6;
+        init(nPlayers);
+        tablero = new Tablero();
     }
 
     private void init(int nPlayers) {
@@ -40,6 +39,7 @@ public class Game extends AppCompatActivity {
         for(int i = 0; i < nPlayers;i++) {
             players.add(new Player(PlayerColors.getColor(i), "p" + i));
         }
+        currPlayerIt = new PlayerIterator(players);
     }
 
 
@@ -55,5 +55,48 @@ public class Game extends AppCompatActivity {
         currPlayer = currPlayerIt.next();
     }
 
+    public void start() {
+        currPlayer = currPlayerIt.next();
+    }
 
+    public void cellClicked(int fila, int columna) {
+        try {
+            tablero.annadirBola(fila, columna, currPlayer.getId(), false);
+            nextTurn();
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public int getNumBolas(int fila, int columna) {
+        int result = tablero.getCelda(fila,columna).getNumBolas();
+        return result;
+    }
+
+    public static void setNFILAS(int NFILAS) {
+        Game.NFILAS = NFILAS;
+    }
+
+    public static void setNCOLUMNAS(int NCOLUMNAS) {
+        Game.NCOLUMNAS = NCOLUMNAS;
+    }
+
+    public void update() {
+        for(int fila = 0; fila < Game.NFILAS;fila++) {
+            for(int col = 0; col < Game.NCOLUMNAS; col++){
+                int id = getId(fila, col);
+                PosTextView view = layout.findViewById(id);
+                String numBolas = Integer.toString(getNumBolas(fila, col));
+                view.setText(numBolas);
+            }
+        }
+    }
+
+    public static int getId(int a, int b) {
+        return (((a+b)*(a+b+1))/2+b);
+    }
+
+    public void setLayout(TableLayout layout) {
+        this.layout = layout;
+    }
 }

@@ -6,6 +6,10 @@
       <w>columna</w>
       <w>existe</w>
       <w>fila</w>
+      <w>filas</w>
+      <w>ncolumnas</w>
+      <w>nfilas</w>
+      <w>nplayers</w>
     </words>
   </dictionary>
 </component>
