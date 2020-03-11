@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -15,18 +17,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //NumberPicker Filas
-        final NumberPicker npFilas = findViewById(R.id.np_filas);
-        npFilas.setMaxValue(15);
-        npFilas.setMinValue(2);
+        //NumberPicker Filas-Columnas
+        final NumberPicker npFilasXColumnas = findViewById(R.id.np_tamanno);
+        final String[] values = {"3 x 2", "6 x 4", "9 x 6", "12 x 8"};
+        npFilasXColumnas.setDisplayedValues(values);
 
-        //NumberPicker Columnas
-        final NumberPicker npColumnas = findViewById(R.id.np_columnas);
-        npColumnas.setMaxValue(10);
-        npColumnas.setMinValue(2);
 
         //NumberPicker Jugadores
-        final NumberPicker npPlayers = findViewById(R.id.np_players);
+        final NumberPicker npPlayers = findViewById(R.id.np_jugadorxs);
         npPlayers.setMaxValue(10);
         npPlayers.setMinValue(2);
 
@@ -37,8 +35,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, GameActivity.class);
-                i.putExtra("NFILAS", npFilas.getValue());
-                i.putExtra("NCOLUMNAS", npColumnas.getValue());
+                String tamanno = values[npFilasXColumnas.getValue()];
+                int filas;
+                int columnas;
+                switch (tamanno) {
+                    case "3 x 2":
+                        filas = 2;
+                        columnas = 2;
+                        break;
+                    case "6 x 4":
+                        filas = 6;
+                        columnas = 4;
+                        break;
+                    case "12 x 8":
+                        filas = 12;
+                        columnas = 8;
+                        break;
+                    default:
+                    case "9 x 6":
+                        filas = 9;
+                        columnas = 6;
+                        break;
+                }
+                i.putExtra("NFILAS", filas);
+                i.putExtra("NCOLUMNAS", columnas);
                 i.putExtra("NJUGADORES", npPlayers.getValue());
                 startActivity(i);
             }
