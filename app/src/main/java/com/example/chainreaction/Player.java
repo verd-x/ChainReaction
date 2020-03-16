@@ -5,19 +5,27 @@ import androidx.annotation.ColorInt;
 
 public class Player {
     private String id;
-    private String color;
+    private int cells;
+    private boolean init;
 
-    public Player(String color, String id) {
+    public Player( String id) {
         this.id = id;
-        this.color = color;
+        this.cells = 0;
+        this.init = false;
     }
 
-
-    public String getColor() {
-        return color;
-    }
 
     public String getId() {
         return id;
+    }
+
+    public void addCell() {
+        if(cells++ == 0) {
+            init = true;
+        }
+    }
+
+    public boolean isDead() {
+        return (cells == 0 && init);
     }
 }

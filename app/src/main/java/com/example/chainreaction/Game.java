@@ -1,24 +1,25 @@
 package com.example.chainreaction;
 
-import android.os.Bundle;
-import android.text.Layout;
-import android.view.View;
-import android.widget.GridLayout;
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.widget.TableLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Game extends AppCompatActivity {
     protected static int NFILAS = 9, NCOLUMNAS = 6;
-    private Iterator<Player> currPlayerIt;
+    private PlayerIterator currPlayerIt;
     private Player currPlayer;
     private Tablero tablero;
     private List<Player> players;
+    private Map<String, Player> playersMap;
     private TableLayout layout;
+    private Context current;
 
     public Game(int NPLAYERS, int NFILAS, int NCOLUMNAS) {
         this.NFILAS = NFILAS;
@@ -27,17 +28,21 @@ public class Game extends AppCompatActivity {
         tablero = new Tablero();
     }
 
-    public Game(int nPlayers) {
+    public Game(int nPlayers, Context current) {
         this.NFILAS = 9;
         this.NCOLUMNAS = 6;
         init(nPlayers);
         tablero = new Tablero();
+        this.current = current;
     }
 
     private void init(int nPlayers) {
         players = new ArrayList<>();
+        playersMap = new HashMap<>();
         for(int i = 0; i < nPlayers;i++) {
-            players.add(new Player(PlayerColors.getColor(i), "p" + i));
+            Player player = new Player( "j" + i);
+            players.add(player);
+            playersMap.put(player.getId(), player);
         }
         currPlayerIt = new PlayerIterator(players);
     }
@@ -48,20 +53,24 @@ public class Game extends AppCompatActivity {
     }
 
     public void nextTurn() {
-        String winner = tablero.checkWinner();
+        Player winner = playerWon();
         if(winner != null) {
-
+            //TODO: poner toast
+        }
+        if(currPlayer.isDead()) {
+            currPlayerIt.remove();
         }
         currPlayer = currPlayerIt.next();
     }
 
     public void start() {
-        currPlayer = currPlayerIt.next();
+        currPlayer = currPlayerIt.getCurrent();
     }
 
     public void cellClicked(int fila, int columna) {
         try {
             tablero.annadirBola(fila, columna, currPlayer.getId(), false);
+            currPlayer.addCell();
             nextTurn();
         } catch(Exception e) {
             System.out.println(e.getMessage());
@@ -70,6 +79,11 @@ public class Game extends AppCompatActivity {
 
     public int getNumBolas(int fila, int columna) {
         int result = tablero.getCelda(fila,columna).getNumBolas();
+        return result;
+    }
+
+    public Player getPlayer(int fila, int columna) {
+        Player result = playersMap.get(tablero.getCelda(fila, columna).getPlayerId());
         return result;
     }
 
@@ -88,6 +102,13 @@ public class Game extends AppCompatActivity {
                 PosTextView view = layout.findViewById(id);
                 String numBolas = Integer.toString(getNumBolas(fila, col));
                 view.setText(numBolas);
+                Player cellPlayer = getPlayer(fila, col);
+                if (cellPlayer != null) {
+                    String cellPlayerId = cellPlayer.getId();
+                    int colorPickerId = current.getResources().getIdentifier(cellPlayerId, "color", current.getPackageName());
+                    if (colorPickerId != 0)
+                        view.setBackground(new ColorDrawable(current.getResources().getColor(colorPickerId)));
+                }
             }
         }
     }
@@ -98,5 +119,13 @@ public class Game extends AppCompatActivity {
 
     public void setLayout(TableLayout layout) {
         this.layout = layout;
+    }
+
+    public Player playerWon() {
+        Player winner = null;
+        if(players.size() == 1) {
+            winner = currPlayer;
+        }
+        return winner;
     }
 }

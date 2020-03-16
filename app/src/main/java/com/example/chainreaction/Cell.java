@@ -24,12 +24,15 @@ public class Cell {
     }
 
     public void annadirBola(String playerId, boolean sobreescribir) throws Exception {
-        if(this.playerId == null || sobreescribir) {
+        if(this.playerId == null) {
             this.playerId = playerId;
+        } else if (this.playerId != playerId && sobreescribir) {
+            this.playerId = playerId;
+
         }
-        if(this.playerId == playerId && !sobreescribir) {
+        if(this.playerId == playerId) {
             numBolas++;
-        } else  {
+        } else{
             throw new Exception("La celda no es del jugador que la ha tocado.");
         }
         comprobarExplosion();
@@ -50,6 +53,7 @@ public class Cell {
         }
         if (numBolas >= maxBolas) {
             numBolas = 0;
+            this.playerId = null;
             throw new ExplosionException();
         }
     }

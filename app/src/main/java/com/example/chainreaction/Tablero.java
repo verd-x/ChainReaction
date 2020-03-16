@@ -44,10 +44,10 @@ public class Tablero {
             try {
                 celda.annadirBola(playerId, sobreescribir);
             } catch (ExplosionException e) {
-                cellMap.get(new Pair<Integer, Integer>(fila - 1, columna)).annadirBola(playerId, true);
-                cellMap.get(new Pair<Integer, Integer>(fila, columna - 1)).annadirBola(playerId, true);
-                cellMap.get(new Pair<Integer, Integer>(fila + 1, columna)).annadirBola(playerId, true);
-                cellMap.get(new Pair<Integer, Integer>(fila, columna + 1)).annadirBola(playerId, true);
+                annadirBola(fila - 1, columna, playerId, true);
+                annadirBola(fila, columna - 1, playerId, true);
+                annadirBola(fila + 1, columna, playerId, true);
+                annadirBola(fila, columna + 1, playerId, true);
             }
 
         }
@@ -61,26 +61,5 @@ public class Tablero {
         return cellMap.get(new Pair<Integer, Integer>(fila, columna));
     }
 
-    public String checkWinner() {
-        boolean result = true;
-        String winner = null;
-        short count = 0;
-        Iterator<Cell> it = celdas.iterator();
-        while (result && it.hasNext()) {
-            Cell c = it.next();
-            if (c.getPlayerId() != null) {
-                count++;
-                if (winner == null) {
-                    winner = c.getPlayerId();
-                } else if (winner != c.getPlayerId()) {
-                    result = false;
-                }
-            }
-        }
-        if (result && count > 1) {
-            return winner;
-        } else {
-            return null;
-        }
-    }
+
 }

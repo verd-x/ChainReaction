@@ -27,9 +27,9 @@ public class GameActivity extends AppCompatActivity {
         Integer filas = i.getIntExtra("NFILAS", 9);
         Integer players = i.getIntExtra("NPLAYERS", 2);
 
+        game = new Game(players, this);
         Game.setNFILAS(filas);
         Game.setNCOLUMNAS(cols);
-        game = new Game(players);
 
         //LAYOUT
         TableLayout layout = new TableLayout(this);
@@ -51,8 +51,8 @@ public class GameActivity extends AppCompatActivity {
 
         layout.setVisibility(View.VISIBLE);
         game.setLayout(layout);
-        game.update();
         game.start();
+        game.update();
         setContentView(layout);
 
 
