@@ -16,7 +16,6 @@ public class CellOnClickListener implements PosTextView.OnClickListener {
         int fila = ((PosTextView) view).getFila();
         int columna = ((PosTextView) view).getColumna();
         game.cellClicked(fila, columna);
-        game.update();
     }
 
 }

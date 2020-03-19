@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
 
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //StartButton
-        Button button = (Button) findViewById(R.id.start_button);
+        Button button = findViewById(R.id.start_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 int columnas;
                 switch (tamanno) {
                     case "3 x 2":
-                        filas = 2;
+                        filas = 3;
                         columnas = 2;
                         break;
                     case "6 x 4":
@@ -58,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
                         columnas = 6;
                         break;
                 }
-                i.putExtra("NFILAS", filas);
-                i.putExtra("NCOLUMNAS", columnas);
+                i.putExtra("filas", filas);
+                i.putExtra("columnas", columnas);
                 i.putExtra("NJUGADORES", npPlayers.getValue());
                 startActivity(i);
             }

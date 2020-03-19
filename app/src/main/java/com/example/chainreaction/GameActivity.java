@@ -20,16 +20,12 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         Intent i = getIntent();
-        Integer cols = i.getIntExtra("NCOLUMNAS", 6);
-        Integer filas = i.getIntExtra("NFILAS", 9);
-        Integer players = i.getIntExtra("NPLAYERS", 2);
+        Integer cols = i.getIntExtra("columnas", 6);
+        Integer filas = i.getIntExtra("filas", 9);
+        Integer players = i.getIntExtra("NJUGADORES", 2);
 
-        game = new Game(players, this);
-        Game.setNFILAS(filas);
-        Game.setNCOLUMNAS(cols);
+        game = new Game(players, this, filas, cols);
 
         //LAYOUT
         TableLayout layout = new TableLayout(this);
@@ -41,9 +37,9 @@ public class GameActivity extends AppCompatActivity {
         layout.setLayoutParams(params);
         layout.setStretchAllColumns(true);
 
-        for(int fila = 0; fila < Game.NFILAS;fila++) {
+        for(int fila = 0; fila < game.getFilas();fila++) {
             TableRow row = createRow();
-            for(int col = 0; col < Game.NCOLUMNAS; col++){
+            for(int col = 0; col < game.getColumnas(); col++){
                 row.addView(createTextView(fila, col));
             }
             layout.addView(row);

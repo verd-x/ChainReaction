@@ -1,14 +1,14 @@
 package com.example.chainreaction;
 
-public class Cell {
+class Cell {
     private String playerId;
     private Position pos;
-    private int fila, columna;
     private int numBolas;
+    private Game game;
 
-    public Cell(int fila, int columna) {
-        boolean bordeNorteSur = (fila == 0 || fila == Game.NFILAS - 1);
-        boolean bordeEsteOeste = (columna == 0 || columna == Game.NCOLUMNAS - 1);
+    Cell(int fila, int columna, Game game) {
+        boolean bordeNorteSur = (fila == 0 || fila == game.getFilas() - 1);
+        boolean bordeEsteOeste = (columna == 0 || columna == game.getColumnas() - 1);
         if(bordeNorteSur && bordeEsteOeste) {
             pos = Position.CORNER;
         } else if(bordeEsteOeste || bordeNorteSur) {
@@ -17,21 +17,23 @@ public class Cell {
             pos = Position.CENTER;
         }
 
-        this.fila = fila;
-        this.columna = columna;
+        this.game = game;
         numBolas = 0;
         playerId = null;
     }
 
-    public void annadirBola(String playerId, boolean sobreescribir) throws Exception {
+    void annadirBola(String playerId, boolean sobreescribir) throws Exception {
         if(this.playerId == null) {
             this.playerId = playerId;
-        } else if (this.playerId != playerId && sobreescribir) {
+        } else if (!this.playerId.equals(playerId) && sobreescribir) {
+            game.decreaseBalls(this.playerId, numBolas);
+            game.addBalls(playerId, numBolas);
             this.playerId = playerId;
 
         }
-        if(this.playerId == playerId) {
+        if(this.playerId.equals(playerId)) {
             numBolas++;
+            game.addBall(playerId);
         } else{
             throw new Exception("La celda no es del jugador que la ha tocado.");
         }
@@ -39,7 +41,7 @@ public class Cell {
     }
 
     private void comprobarExplosion() throws ExplosionException {
-        int maxBolas = 4;
+        int maxBolas;
         switch(pos) {
             case CORNER:
                maxBolas = 2;
@@ -48,21 +50,23 @@ public class Cell {
                 maxBolas = 3;
                 break;
             case CENTER:
+            default:
                 maxBolas = 4;
                 break;
         }
         if (numBolas >= maxBolas) {
+            game.decreaseBalls(playerId, numBolas);
             numBolas = 0;
             this.playerId = null;
             throw new ExplosionException();
         }
     }
 
-    public int getNumBolas() {
+    int getNumBolas() {
         return numBolas;
     }
 
-    public String getPlayerId() {
+    String getPlayerId() {
         return playerId;
     }
 }

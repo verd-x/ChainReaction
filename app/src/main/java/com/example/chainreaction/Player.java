@@ -28,4 +28,12 @@ public class Player {
     public boolean isDead() {
         return (cells == 0 && init);
     }
+
+    public void decreaseBalls(int numBolas) {
+        cells--;
+    }
+
+    public void addCells(int numBolas) {
+        cells += numBolas;
+    }
 }
