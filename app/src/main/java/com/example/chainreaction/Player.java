@@ -1,8 +1,5 @@
 package com.example.chainreaction;
 
-
-import androidx.annotation.ColorInt;
-
 public class Player {
     private String id;
     private int cells;
@@ -30,7 +27,7 @@ public class Player {
     }
 
     public void decreaseBalls(int numBolas) {
-        cells--;
+        cells -= numBolas;
     }
 
     public void addCells(int numBolas) {
