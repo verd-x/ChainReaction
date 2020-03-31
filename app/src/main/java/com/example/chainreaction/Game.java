@@ -2,7 +2,9 @@ package com.example.chainreaction;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -10,9 +12,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TableLayout;
-
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +25,8 @@ public class Game {
     private Tablero tablero;
     private List<Player> players;
     private Map<String, Player> playersMap;
+    private TableLayout layout;
+    private Context current;
 
     public int getFilas() {
         return filas;
@@ -34,9 +35,6 @@ public class Game {
     public int getColumnas() {
         return columnas;
     }
-
-    private TableLayout layout;
-    private Context current;
 
     public Game(int nPlayers, Context current, int filas, int columnas) {
         this.filas = filas;
@@ -106,17 +104,37 @@ public class Game {
         for (int fila = 0; fila < filas; fila++) {
             for (int col = 0; col < columnas; col++) {
                 int id = getId(fila, col);
-                PosTextView view = layout.findViewById(id);
-                String numBolas = Integer.toString(getNumBolas(fila, col));
-                view.setText(numBolas);
+                PosImageView view = layout.findViewById(id);
+
+                Drawable balls;
+                if(getNumBolas(fila, col) > 0) {
+                    switch(getNumBolas(fila, col)) {
+                        case 1:
+                            balls = current.getResources().getDrawable(R.drawable.ball);
+                            break;
+                        case 2:
+                            balls = current.getResources().getDrawable(R.drawable.two_balls);
+                            break;
+                        case 3:
+                            balls = current.getResources().getDrawable(R.drawable.three_balls);
+                            break;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + getNumBolas(fila, col));
+                    }
+                    view.setImageDrawable(balls);
+                } else {
+                    view.setImageDrawable(null);
+                }
                 Player cellPlayer = getPlayer(fila, col);
                 if (cellPlayer != null) {
                     String cellPlayerId = cellPlayer.getId();
                     int colorPickerId = current.getResources().getIdentifier(cellPlayerId, "color", current.getPackageName());
-                    if (colorPickerId != 0) {}
-                        view.setBackground(new ColorDrawable(current.getResources().getColor(colorPickerId)));
+                    if (colorPickerId != 0) {
+                        //view.setColorFilter(colorPickerId, PorterDuff.Mode.OVERLAY);
+                        //view.setBackground(new ColorDrawable(current.getResources().getColor(colorPickerId)));
+                    }
                 } else {
-                    view.setBackground(new ColorDrawable(current.getResources().getColor(R.color.colorPrimary)));
+                    //view.setBackground(new ColorDrawable(current.getResources().getColor(R.color.colorPrimary)));
                 }
             }
         }

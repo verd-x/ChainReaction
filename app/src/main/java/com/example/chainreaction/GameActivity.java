@@ -40,7 +40,7 @@ public class GameActivity extends AppCompatActivity {
         for(int fila = 0; fila < game.getFilas();fila++) {
             TableRow row = createRow();
             for(int col = 0; col < game.getColumnas(); col++){
-                row.addView(createTextView(fila, col));
+                row.addView(new PosImageView(this, fila, col, game));
             }
             layout.addView(row);
         }
@@ -65,24 +65,4 @@ public class GameActivity extends AppCompatActivity {
         row.setLayoutParams(pRow);
         return row;
     }
-
-    private PosTextView createTextView(int fila, int columna) {
-        PosTextView view = new PosTextView(this, fila, columna);
-        view.setText("Hello");
-        view.setGravity(Gravity.CENTER);
-        TableRow.LayoutParams param = new TableRow.LayoutParams(
-                TableRow.LayoutParams.MATCH_PARENT,
-                TableRow.LayoutParams.MATCH_PARENT,
-                 1.0f
-        );
-        view.setLayoutParams(param);
-        view.setOnClickListener(new CellOnClickListener(game));
-        view.setId(Game.getId(fila, columna));
-
-
-        view.setVisibility(View.VISIBLE);
-        return view;
-    }
-
-
 }

@@ -2,7 +2,7 @@ package com.example.chainreaction;
 
 import android.view.View;
 
-public class CellOnClickListener implements PosTextView.OnClickListener {
+public class CellOnClickListener implements PosImageView.OnClickListener {
 
     Game game;
 
@@ -13,8 +13,8 @@ public class CellOnClickListener implements PosTextView.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        int fila = ((PosTextView) view).getFila();
-        int columna = ((PosTextView) view).getColumna();
+        int fila = ((PosImageView) view).getFila();
+        int columna = ((PosImageView) view).getColumna();
         game.cellClicked(fila, columna);
     }
 
